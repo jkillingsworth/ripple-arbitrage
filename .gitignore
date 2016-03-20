@@ -1,0 +1,7 @@
+.vs
+build
+packages
+private
+
+*.VisualState.xml
+TestResult.xml
