@@ -48,14 +48,14 @@ let computeAmount = List.sumBy (fun x -> x.TakerGets.Value)
 
 //-------------------------------------------------------------------------------------------------
 
-let currency1 = NativeCurrency Xrp
-let currency2 = IssuedCurrency { Code = "JPY"; Issuer = "r94s8px6kSw1uZ1MV98dhSRTvc6VMPoPcN" }
-let currency3 = IssuedCurrency { Code = "CNY"; Issuer = "rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y" }
+let currency0 = NativeCurrency Xrp
+let currency1 = IssuedCurrency { Code = "JPY"; Issuer = "r94s8px6kSw1uZ1MV98dhSRTvc6VMPoPcN" }
+let currency2 = IssuedCurrency { Code = "CNY"; Issuer = "rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y" }
 
 let requests =
-    [| getRequest currency2 currency1
-       getRequest currency3 currency2
-       getRequest currency1 currency3 |]
+    [| getRequest currency1 currency0
+       getRequest currency2 currency1
+       getRequest currency0 currency2 |]
 
 let offers = getBookOffers requests
 
