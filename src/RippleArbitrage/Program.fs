@@ -24,7 +24,7 @@ let getBookOffers currencyGets currencyPays =
 
 //-------------------------------------------------------------------------------------------------
 
-let rec computeOffersToTake takes offers amount =
+let rec computeOffersToTake offers takes amount =
     match offers with
     | []
         -> failwith "Market not deep enough."
@@ -41,7 +41,7 @@ let rec computeOffersToTake takes offers amount =
         ->
         let takes = head :: takes
         let amount = amount - head.TakerPays.Value
-        computeOffersToTake takes tail amount
+        computeOffersToTake tail takes amount
 
 let computeAmount = List.sumBy (fun x -> x.TakerGets.Value)
 
@@ -58,11 +58,11 @@ let offers3 = getBookOffers currency1 currency3
 let amountStart = 50000m
 let amountFinal =
     amountStart
-    |> computeOffersToTake [] offers1
+    |> computeOffersToTake offers1 []
     |> computeAmount
-    |> computeOffersToTake [] offers2
+    |> computeOffersToTake offers2 []
     |> computeAmount
-    |> computeOffersToTake [] offers3
+    |> computeOffersToTake offers3 []
     |> computeAmount
 
 let profit = amountFinal - amountStart
