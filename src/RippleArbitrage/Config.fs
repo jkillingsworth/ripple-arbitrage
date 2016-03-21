@@ -1,4 +1,4 @@
-﻿module Config
+﻿module RippleArbitrage.Config
 
 open System.Configuration
 

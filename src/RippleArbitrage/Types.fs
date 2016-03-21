@@ -1,4 +1,4 @@
-﻿module RippleTool.Types
+﻿module RippleArbitrage.Types
 
 open System
 

@@ -1,10 +1,10 @@
 ﻿module Program
 
 open Chiron
-open RippleTool
-open RippleTool.Types
-open RippleTool.Command.Request
-open RippleTool.Command.Response
+open RippleArbitrage
+open RippleArbitrage.Types
+open RippleArbitrage.Command.Request
+open RippleArbitrage.Command.Response
 
 //-------------------------------------------------------------------------------------------------
 

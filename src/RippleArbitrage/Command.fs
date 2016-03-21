@@ -1,8 +1,8 @@
-﻿module RippleTool.Command
+﻿module RippleArbitrage.Command
 
 open Chiron
 open WebSocket4Net
-open RippleTool.Types
+open RippleArbitrage.Types
 
 //-------------------------------------------------------------------------------------------------
 
