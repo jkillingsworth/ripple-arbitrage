@@ -8,19 +8,20 @@ open RippleArbitrage.Command.Response
 
 //-------------------------------------------------------------------------------------------------
 
-let getBookOffers currencyGets currencyPays =
+let getRequest currencyGets currencyPays =
 
-    let request =
-        { Ledger = Some Ledger.Validated
-          TakerGets = currencyGets
-          TakerPays = currencyPays }
+    { Ledger = Some Ledger.Validated
+      TakerGets = currencyGets
+      TakerPays = currencyPays }
 
-    request
-    |> Json.ofBookOffersRequest
-    |> Json.format
+let getBookOffers requests =
+
+    requests
+    |> Array.map Json.ofBookOffersRequest
+    |> Array.map Json.format
     |> Command.execute Config.serverUri
-    |> Json.parse
-    |> Json.toBookOffersResponse
+    |> Array.map Json.parse
+    |> Array.map Json.toBookOffersResponse
 
 //-------------------------------------------------------------------------------------------------
 
@@ -51,18 +52,21 @@ let currency1 = NativeCurrency Xrp
 let currency2 = IssuedCurrency { Code = "JPY"; Issuer = "r94s8px6kSw1uZ1MV98dhSRTvc6VMPoPcN" }
 let currency3 = IssuedCurrency { Code = "CNY"; Issuer = "rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y" }
 
-let offers1 = getBookOffers currency2 currency1
-let offers2 = getBookOffers currency3 currency2
-let offers3 = getBookOffers currency1 currency3
+let requests =
+    [| getRequest currency2 currency1
+       getRequest currency3 currency2
+       getRequest currency1 currency3 |]
+
+let offers = getBookOffers requests
 
 let amountStart = 50000m
 let amountFinal =
     amountStart
-    |> computeOffersToTake offers1 []
+    |> computeOffersToTake offers.[0] []
     |> computeAmount
-    |> computeOffersToTake offers2 []
+    |> computeOffersToTake offers.[1] []
     |> computeAmount
-    |> computeOffersToTake offers3 []
+    |> computeOffersToTake offers.[2] []
     |> computeAmount
 
 let profit = amountFinal - amountStart

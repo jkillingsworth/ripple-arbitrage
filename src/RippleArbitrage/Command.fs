@@ -103,7 +103,10 @@ module Response =
 
 //-------------------------------------------------------------------------------------------------
 
-let execute serverUri request =
+let execute serverUri requests =
+
+    let itemcount = Array.length requests
+    let responses = Array.zeroCreate itemcount
 
     let computation = async {
 
@@ -112,14 +115,17 @@ let execute serverUri request =
         ws.Open()
         let! ea = Async.AwaitEvent(ws.Opened)
 
-        ws.Send(request : string)
-        let! ea = Async.AwaitEvent(ws.MessageReceived)
-        let response = ea.Message
+        for i = 0 to itemcount - 1 do
+            ws.Send(requests.[i] : string)
+
+        for i = 0 to itemcount - 1 do
+            let! ea = Async.AwaitEvent(ws.MessageReceived)
+            responses.[i] <- ea.Message
 
         ws.Close()
         let! ea = Async.AwaitEvent(ws.Closed)
 
-        return response
+        return responses
     }
 
     Async.RunSynchronously(computation, 5000)
